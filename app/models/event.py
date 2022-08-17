@@ -10,6 +10,7 @@ class Event:
     def __init__(self,db_data):
         self.id = db_data['id']
         self.name = db_data['name']
+        self.information = db_data['information']
         self.location = db_data['location']
         self.attendees = db_data['attendees']
         self.attendees_confirmed = db_data['attendees_confirmed']
@@ -21,7 +22,7 @@ class Event:
 
     @classmethod 
     def save(cls,event):
-        query = "INSERT INTO events(name,location,time,user_id) VALUES (%(name)s, %(location)s, %(time)s, %(user_id)s);"
+        query = "INSERT INTO events(name,information,location,time,user_id) VALUES (%(name)s, %(information)s, %(location)s, %(time)s, %(user_id)s);"
         return connectToMySQL(cls.db).query_db(query, event)
 
     @classmethod 
@@ -84,6 +85,9 @@ class Event:
         if len(event['name']) < 2:
             is_valid = False
             flash("Evnet first name must be at least 2 characters","event")
+        if len(event['information']) < 10:
+            is_valid = False
+            flash("Provide more information about this event","event")
         if len(event['location']) < 2:
             is_valid = False
             flash("Location must be at least 2 characters","event")

@@ -22,6 +22,7 @@ def new_event_form():
         return redirect ('/new_event')
     data = {
         'name': request.form['name'],
+        'information': request.form['information'],
         'location': request.form['location'],
         'time': request.form['time'],
         'user_id': session['user_id']
