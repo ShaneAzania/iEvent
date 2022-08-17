@@ -4,14 +4,20 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="{{ url_for('static',filename='bootstrap/bootstrap.css') }}" />
-		<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}" />
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static',filename='bootstrap/bootstrap.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static',filename='css/style.css') }}"
+		/>
 		<title>{{title}}</title>
 	</head>
 	<body id="">
 		<!-- display nav component -->
 		{{nav | safe}}
-		
+
 		<div class="errors">
 			{% with messages = get_flashed_messages() %}<!-- declare a variable called messages -->
 			{% if messages %}<!-- check if there are any messages -->
@@ -25,14 +31,15 @@
 			<h1>Welcome {{first_name}}!</h1>
 			<table class="table table-hover">
 				<thead>
-					<p>Today is XXXXXXX and you have XXXX event today: </p>
+					<p>Today is XXXXXXX and you have XXXX event today:</p>
 					<tr>
 						<th>Event Name</th>
 						<th>Location</th>
 						<th>Day & Time</th>
+						<th>Creator</th>
 					</tr>
 				</thead>
-				 <tbody>
+				<tbody>
 					{% for event in events %}
 
 					<tr>
@@ -40,23 +47,27 @@
 						<td>{{event.location}}</td>
 						<td>{{event.time}}</td>
 						<td>
+							{{event.user.first_name}} {{event.user.last_name}}
+						</td>
+						<td>
 							<!-- if statment for might need to encomus lines 41-44 -->
 						</td>
 					</tr>
 					{% endfor %}
-				 </tbody>
+				</tbody>
 			</table>
-			<br>
+			<br />
 			<table class="table table-hover p-7">
 				<thead>
-					<p>All Upcoming Events: </p>
+					<p>All Upcoming Events:</p>
 					<tr>
 						<th>Event Name</th>
 						<th>Location</th>
 						<th>Day & Time</th>
+						<th>Creator</th>
 					</tr>
 				</thead>
-				 <tbody>
+				<tbody>
 					{% for event in events %}
 
 					<tr>
@@ -64,15 +75,17 @@
 						<td>{{event.location}}</td>
 						<td>{{event.time}}</td>
 						<td>
+							{{event.user.first_name}} {{event.user.last_name}}
+						</td>
+						<td>
 							<!-- if statment for might need to encomus lines 41-44 -->
 						</td>
 					</tr>
 					{% endfor %}
-				 </tbody>
+				</tbody>
 			</table>
 			<a href="/new_event" class="'btn btn-primary p-2"> Add New Event</a>
 		</div>
-		
 
 		<script src="{{ url_for('static', filename='bootstrap/bootstrap.bundle.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/index.js') }}"></script>
