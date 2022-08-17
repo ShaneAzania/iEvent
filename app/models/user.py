@@ -3,6 +3,7 @@ from unittest import result
 from flask import flash
 from app.assets.regex import EMAIL_REGEX
 from app.config.mysqlconnection import connectToMySQL
+from app.models.event import Event 
 
 class User:
     db = 'isport'

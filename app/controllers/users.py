@@ -1,6 +1,7 @@
 from app import app
 from flask import flash, render_template,redirect,request,session
 from app.models.user import User
+from app.models.event import Event
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 # nav component import

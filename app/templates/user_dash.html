@@ -21,15 +21,56 @@
 			{% endfor %} {% endif %} {% endwith %}
 		</div>
 
-		<div class="container-fluid">
-			<h2> All Events</h2>
+		<div class="container-fluid col-8 mx-auto">
+			<h1>Welcome {{first_name}}!</h1>
 			<table class="table table-hover">
-				<tr>
-					<th>Name</th>
-					<th>Location</th>
-					<th>Time</th>
-				</tr>
+				<thead>
+					<p>Today is XXXXXXX and you have XXXX event today: </p>
+					<tr>
+						<th>Event Name</th>
+						<th>Location</th>
+						<th>Day & Time</th>
+					</tr>
+				</thead>
+				 <tbody>
+					{% for event in event %}
+
+					<tr>
+						<td>{{event.name}}</td>
+						<td>{{event.location}}</td>
+						<td>{{event.ime}}</td>
+						<td>
+							<!-- if statment for might need to encomus lines 41-44 -->
+						</td>
+					</tr>
+					{% endfor %}
+				 </tbody>
 			</table>
+			<br>
+			<table class="table table-hover p-7">
+				<thead>
+					<p>All Upcoming Events: </p>
+					<tr>
+						<th>Event Name</th>
+						<th>Location</th>
+						<th>Day & Time</th>
+					</tr>
+				</thead>
+				 <tbody>
+					{% for event in event %}
+
+					<tr>
+						<td>{{event.name}}</td>
+						<td>{{event.location}}</td>
+						<td>{{event.ime}}</td>
+						<td>
+							<!-- if statment for might need to encomus lines 41-44 -->
+						</td>
+					</tr>
+					{% endfor %}
+				 </tbody>
+			</table>
+			<a href="new/event" class="'btn btn-primary p-2"> Add New Event</a>
 		</div>
 		
 

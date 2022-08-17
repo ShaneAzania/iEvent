@@ -37,42 +37,42 @@ class Event:
     @classmethod 
     def get_one_event(cls, event):
         query = " SLECT * FROM events WHERE id = %(id)s;"
-        reslutls = connectToMySQL(cls,db)query_db(query,event)
+        reslutls = connectToMySQL(cls,db).query_db(query,event)
         return cls(results[0])
 
-    @classmethod 
-    def get_all_events_with_users(cls,data):
-        query = "SELECT * FROM events JOIN users on events.user_id = users.id"
-        results = connectToMySQL(cls.db).query_db(query,data)
-        if len(results) == 0:
-            return []
-        else: 
-            all_event_instances = []
-            for current_event_dic in results: 
-                event_instance = cls(current_event_dic)
-                new_event_dic ={
-                    "id": current_event_dic['users.id'],
-                    "first_name": current_event_dic['first_name'],
-                    "last_name": current_event_dic['last_name'],
-                    "email": current_event_dic['email'],
-                    "password": current_event_dic['password'],
-                    "confirm_password": current_event_dic['confirm_password'],
-                    "created_at": current_event_dic['users.created_at'],
-                    "updated_at": current_event_dic['users.updated_at'],
-                }
-                user_instance = user.User(new_event_dic)
-                event_instance.user = user_instance
-                all_event_instances.append(event_instance)
-            return all_event_instances
+    # @classmethod 
+    # def get_all_events_with_users(cls,data):
+    #     query = "SELECT * FROM events JOIN users on events.user_id = users.id"
+    #     results = connectToMySQL(cls.db).query_db(query,data)
+    #     if len(results) == 0:
+    #         return []
+    #     else: 
+    #         all_event_instances = []
+    #         for current_event_dic in results: 
+    #             event_instance = cls(current_event_dic)
+    #             new_event_dic ={
+    #                 "id": current_event_dic['users.id'],
+    #                 "first_name": current_event_dic['first_name'],
+    #                 "last_name": current_event_dic['last_name'],
+    #                 "email": current_event_dic['email'],
+    #                 "password": current_event_dic['password'],
+    #                 "confirm_password": current_event_dic['confirm_password'],
+    #                 "created_at": current_event_dic['users.created_at'],
+    #                 "updated_at": current_event_dic['users.updated_at'],
+    #             }
+    #             user_instance = user.User(new_event_dic)
+    #             event_instance.user = user_instance
+    #             all_event_instances.append(event_instance)
+    #         return all_event_instances
 
     @classmethod 
-        def update(cls,event):
+    def update(cls,event):
             query = "UPDATE events SET name=%(name)s,location=%(location)s,attendees=%(attendees)s,attendees_confirmed=%(attendees_confimred)s,time=%(time)s,updated_at=NOW() WHERE id = %(id)s;"
             return connectToMYSQL(cls,db).query_db(query.event)
 
     @classmethod 
     def destroy (cls,event):
-        query " DELETE FROM nurses WHERE id=%(id)s;"
+        query = " DELETE FROM nurses WHERE id=%(id)s;"
         return connectToMySQL(cls,db).query_db(query,event)
 
 # ************************** validation 
@@ -90,4 +90,9 @@ class Event:
         if len(event['time']) < 4:
             is_valid = False
             flash("Time must be at least 4 characters","event")
+        return is_valid
+        if len(event['attendees']) < 1:
+            is_valid = False
+            flash("Attendees must be at greater than 1","event")
         return is_valid  
+       
