@@ -14,16 +14,29 @@ def nav_render(data = {}):
 		'search_string': search_string,
 	}
 	'''
-	dash_and_images_links = ''
+	logged_in_links = ''
 	login_logout = ''
 	user_name = ''
 	search_string = ''
 	# display Dash and Images links
 	if "user_id" in session:
-		dash_and_images_links = '<!-- li class="nav-item">'\
+		logged_in_links = ''\
+							'<li class="nav-item">'\
 								'<a class="nav-link" href="/user_dash">'\
+									'Dash'\
 								'</a>'\
-							'</li -->'
+							'</li>'\
+							'<li class="nav-item">'\
+								'<a class="nav-link" href="/new/event">'\
+									'New Event'\
+								'</a>'\
+							'</li>'\
+							'<!--li class="nav-item">'\
+								'<a class="nav-link" href="/create/event/">'\
+									''\
+								'</a>'\
+							'</li-->'
+							
 		login_logout = '<a class="nav-link" href="/user_logout">Logout</a>'
 		user_name = session['first_name']
 	else:
@@ -53,7 +66,7 @@ def nav_render(data = {}):
 							'<a class="nav-link" href="/">Home</a>'\
 						'</li>'\
 						'<!-- Nav links that show up when logged in as a user -->'\
-						f'{dash_and_images_links}'\
+						f'{logged_in_links}'\
 						'<li class="nav-item">'\
 							f'{login_logout}'\
 						'</li>'\
