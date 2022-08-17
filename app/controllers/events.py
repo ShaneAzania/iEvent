@@ -8,27 +8,24 @@ bcrypt = Bcrypt(app)
 from app.assets.repeat_page_elements import nav_render
 
 
-@app.route('/new/event')
+@app.route('/new_event')
 def new_event():
     if 'user_id' not in session:
-        return redirect('/logout')
-    data = {
-        "id":session['user_id']
-    }
-    return redirect('/user_dash')
+        return redirect('/user_login')
+    return render_template('event_add.html', nav = nav_render())
 
-
-@app.route('/create/event/', methods = ['POST'])
-def create_event():
+@app.route('/new_event_form', methods = ['POST'])
+def new_event_form():
     if 'user_id' not in session:
-        return redirect ('/user_logout')
-    if not Event.validate_event(reqeust.form):
-        return redirect ('/new/event')
+        return redirect ('/user_login')
+    if not Event.validate_event(request.form):
+        return redirect ('/new_event')
     data = {
         'name': request.form['name'],
-        'lcoation': request.form ['lcoation'],
-        'time': request.form ['time',]
+        'location': request.form['location'],
+        'time': request.form['time'],
+        'user_id': session['user_id']
     }
     Event.save(data)
-    return redirect('/user_dash', nav_render)
+    return redirect('/user_dash')
 

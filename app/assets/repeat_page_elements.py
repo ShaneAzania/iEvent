@@ -27,12 +27,12 @@ def nav_render(data = {}):
 								'</a>'\
 							'</li>'\
 							'<li class="nav-item">'\
-								'<a class="nav-link" href="/new/event">'\
-									'New Event'\
+								'<a class="nav-link" href="/new_event">'\
+									'Add Event'\
 								'</a>'\
 							'</li>'\
 							'<!--li class="nav-item">'\
-								'<a class="nav-link" href="/create/event/">'\
+								'<a class="nav-link" href="/new_event">'\
 									''\
 								'</a>'\
 							'</li-->'

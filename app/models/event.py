@@ -8,26 +8,26 @@ class Event:
     db = "iSport"
     db_table = "events"
     def __init__(self,db_data):
-        self.id = db ['id']
-        self.name = db['name']
-        self.location = db ['location']
-        self.attendees = db ['attendees']
-        self.attendees_confirmed = db ['attendees_confimred']
-        self.time = db ['time']
-        self.created_at = db ['created_at']
-        self.updated_at = db ['updated_at']
+        self.id = db_data['id']
+        self.name = db_data['name']
+        self.location = db_data['location']
+        self.attendees = db_data['attendees']
+        self.attendees_confirmed = db_data['attendees_confimred']
+        self.time = db_data['time']
+        self.created_at = db_data['created_at']
+        self.updated_at = db_data['updated_at']
         self.user = None
 
 
     @classmethod 
     def save(cls,event):
-        query = "INSERT INTO events(name,location,attendees, attendees_confirmed,time) VALUES (%(name)s, %(location)s, %(attendees)s, %(attendees_confimred)s, %(time)s, %(user_id)s);"
-        return connectToMySQL(cls,db).query_db(query, event)
+        query = "INSERT INTO events(name,location,time,user_id) VALUES (%(name)s, %(location)s, %(time)s, %(user_id)s);"
+        return connectToMySQL(cls.db).query_db(query, event)
 
     @classmethod 
     def get_all_events(cls):
         query = " SELECT * FROM events;"
-        results = connectToMySQL(cls,db).query_db(query)
+        results = connectToMySQL(cls.db).query_db(query)
         all_events = []
         for row in results:
             print (row['Name'])
@@ -37,7 +37,7 @@ class Event:
     @classmethod 
     def get_one_event(cls, event):
         query = " SLECT * FROM events WHERE id = %(id)s;"
-        reslutls = connectToMySQL(cls,db).query_db(query,event)
+        results = connectToMySQL(cls.db).query_db(query,event)
         return cls(results[0])
 
     # @classmethod 
@@ -68,12 +68,12 @@ class Event:
     @classmethod 
     def update(cls,event):
             query = "UPDATE events SET name=%(name)s,location=%(location)s,attendees=%(attendees)s,attendees_confirmed=%(attendees_confimred)s,time=%(time)s,updated_at=NOW() WHERE id = %(id)s;"
-            return connectToMYSQL(cls,db).query_db(query.event)
+            return connectToMySQL(cls.db).query_db(query, event)
 
     @classmethod 
     def destroy (cls,event):
         query = " DELETE FROM events WHERE id=%(id)s;"
-        return connectToMySQL(cls,db).query_db(query,event)
+        return connectToMySQL(cls.db).query_db(query, event)
 
 # ************************** validation 
 # time validation will need updated and we need to add attendees etc. 
@@ -90,9 +90,8 @@ class Event:
         if len(event['time']) < 4:
             is_valid = False
             flash("Time must be at least 4 characters","event")
-        return is_valid
-        if len(event['attendees']) < 1:
-            is_valid = False
-            flash("Attendees must be at greater than 1","event")
+        # if len(event['attendees']) < 1:
+        #     is_valid = False
+        #     flash("Attendees must be at greater than 1","event")
         return is_valid  
        
