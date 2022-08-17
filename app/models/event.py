@@ -27,7 +27,7 @@ class Event:
 
     @classmethod 
     def get_all_events(cls):
-        query = "SELECT * FROM events LEFT JOIN users ON events.user_id = users.id;"
+        query = "SELECT * FROM events LEFT JOIN users ON events.user_id = users.id ORDER BY time DESC;"
         results = connectToMySQL(cls.db).query_db(query)
         all_events = []
         for row in results:
@@ -89,9 +89,6 @@ class Event:
         if len(event['name']) < 2:
             is_valid = False
             flash("Evnet first name must be at least 2 characters","event")
-        if len(event['information']) < 10:
-            is_valid = False
-            flash("Provide more information about this event","event")
         if len(event['location']) < 2:
             is_valid = False
             flash("Location must be at least 2 characters","event")

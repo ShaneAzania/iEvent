@@ -31,7 +31,7 @@
 			<h1>Welcome {{first_name}}!</h1>
 			<table class="table table-hover">
 				<thead>
-					<p>Today is XXXXXXX and you have XXXX event today:</p>
+					<p>Today is {{todays_date.strftime('%m/%d/%Y')}} and you have {{events_today | length}} event today:</p>
 					<tr>
 						<th>Event Name</th>
 						<th>Location</th>
@@ -40,12 +40,12 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for event in events %}
+					{% for event in events_today %}
 
 					<tr>
 						<td>{{event.name}}</td>
 						<td>{{event.location}}</td>
-						<td>{{event.time}}</td>
+						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
 						<td>
 							{{event.user.first_name}} {{event.user.last_name}}
 						</td>
@@ -73,7 +73,7 @@
 					<tr>
 						<td>{{event.name}}</td>
 						<td>{{event.location}}</td>
-						<td>{{event.time}}</td>
+						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
 						<td>
 							{{event.user.first_name}} {{event.user.last_name}}
 						</td>

@@ -4,6 +4,8 @@ from app.models.user import User
 from app.models import event
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
+import datetime
+todays_date = datetime.datetime.now()
 # nav component import
 from app.assets.repeat_page_elements import nav_render
 
@@ -96,6 +98,13 @@ def user_logout():
 def user_dash():
     if 'user_id' in session:
         events = event.Event.get_all_events()
-        return render_template('user_dash.html', nav = nav_render(), events = events)
+        events_today = []
+        for e in events:
+            print('todays date'.upper(), todays_date.strftime('%m/%d/%Y'))
+            print('event date'.upper(), e.time.strftime('%m/%d/%Y'))
+            print()
+            if e.time.strftime('%m/%d/%Y') == todays_date.strftime('%m/%d/%Y'):
+                events_today.append(e)
+        return render_template('user_dash.html', nav = nav_render(), events = events, events_today = events_today, todays_date = todays_date)
     else:
         return redirect('/user_login')
