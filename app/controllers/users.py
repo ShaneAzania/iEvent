@@ -1,7 +1,7 @@
 from app import app
 from flask import flash, render_template,redirect,request,session
 from app.models.user import User
-from app.models.event import Event
+from app.models import event
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 # nav component import
@@ -94,7 +94,8 @@ def user_logout():
 #dash
 @app.route('/user_dash')
 def user_dash():
-    if 'user_id' in session:        
-        return render_template('user_dash.html', nav = nav_render())
+    if 'user_id' in session:
+        events = event.Event.get_all_events()
+        return render_template('user_dash.html', nav = nav_render(), events = events)
     else:
         return redirect('/user_login')

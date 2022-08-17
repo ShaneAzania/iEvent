@@ -12,7 +12,7 @@ class Event:
         self.name = db_data['name']
         self.location = db_data['location']
         self.attendees = db_data['attendees']
-        self.attendees_confirmed = db_data['attendees_confimred']
+        self.attendees_confirmed = db_data['attendees_confirmed']
         self.time = db_data['time']
         self.created_at = db_data['created_at']
         self.updated_at = db_data['updated_at']
@@ -30,7 +30,7 @@ class Event:
         results = connectToMySQL(cls.db).query_db(query)
         all_events = []
         for row in results:
-            print (row['Name'])
+            print (row['name'])
             all_events.append(cls(row) )
         return all_events 
 
@@ -67,7 +67,7 @@ class Event:
 
     @classmethod 
     def update(cls,event):
-            query = "UPDATE events SET name=%(name)s,location=%(location)s,attendees=%(attendees)s,attendees_confirmed=%(attendees_confimred)s,time=%(time)s,updated_at=NOW() WHERE id = %(id)s;"
+            query = "UPDATE events SET name=%(name)s,location=%(location)s,attendees=%(attendees)s,attendees_confirmed=%(attendees_confirmed)s,time=%(time)s,updated_at=NOW() WHERE id = %(id)s;"
             return connectToMySQL(cls.db).query_db(query, event)
 
     @classmethod 
