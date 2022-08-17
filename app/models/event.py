@@ -72,7 +72,7 @@ class Event:
 
     @classmethod 
     def destroy (cls,event):
-        query = " DELETE FROM nurses WHERE id=%(id)s;"
+        query = " DELETE FROM events WHERE id=%(id)s;"
         return connectToMySQL(cls,db).query_db(query,event)
 
 # ************************** validation 
