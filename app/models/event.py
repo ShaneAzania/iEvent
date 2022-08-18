@@ -27,7 +27,7 @@ class Event:
 
     @classmethod 
     def get_all_events(cls):
-        query = "SELECT * FROM events LEFT JOIN users ON events.user_id = users.id ORDER BY time DESC;"
+        query = "SELECT * FROM events LEFT JOIN users ON events.user_id = users.id ORDER BY time ASC;"
         results = connectToMySQL(cls.db).query_db(query)
         all_events = []
         for row in results:
@@ -40,7 +40,7 @@ class Event:
         return all_events 
     @classmethod 
     def get_all_events_future(cls):
-        query = "SELECT * FROM events LEFT JOIN users ON events.user_id = users.id WHERE time > now() ORDER BY time DESC;"
+        query = "SELECT * FROM events LEFT JOIN users ON events.user_id = users.id WHERE time > now() ORDER BY time ASC;"
         results = connectToMySQL(cls.db).query_db(query)
         all_events = []
         for row in results:
@@ -53,7 +53,7 @@ class Event:
         return all_events 
     @classmethod 
     def get_all_events_past(cls):
-        query = "SELECT * FROM events LEFT JOIN users ON events.user_id = users.id WHERE time < now() ORDER BY time DESC;"
+        query = "SELECT * FROM events LEFT JOIN users ON events.user_id = users.id WHERE time < now() ORDER BY time ASC;"
         results = connectToMySQL(cls.db).query_db(query)
         all_events = []
         for row in results:

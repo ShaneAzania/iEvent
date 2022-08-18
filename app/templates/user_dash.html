@@ -4,14 +4,8 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link
-			rel="stylesheet"
-			href="{{ url_for('static',filename='bootstrap/bootstrap.css') }}"
-		/>
-		<link
-			rel="stylesheet"
-			href="{{ url_for('static',filename='css/style.css') }}"
-		/>
+		<link rel="stylesheet" href="{{ url_for('static',filename='bootstrap/bootstrap.css') }}" />
+		<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}" />
 		<title>{{title}}</title>
 	</head>
 	<body id="">
@@ -31,10 +25,15 @@
 			<h1>Welcome {{first_name}}!</h1>
 			<table class="table table-hover">
 				<thead>
-					<p>
-						Today is {{todays_date.strftime('%m/%d/%Y')}} and you
-						have {{events_today | length}} event today:
-					</p>
+					<div class="d-flex justify-content-between">
+						<p class="d-inline-block">
+							Today is {{todays_date.strftime('%m/%d/%Y')}} and you have
+							{{events_today | length}} event today:
+						</p>
+						<a href="/new_event" class="btn btn-primary">
+							Add New Event
+						</a>
+					</div>
 					<tr>
 						<th>Event Name</th>
 						<th>Location</th>
@@ -43,20 +42,24 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for event in events_today %}
-
+					{% if events_today | length > 0 %} {% for event in events_today %}
 					<tr>
 						<td>{{event.name}}</td>
 						<td>{{event.location}}</td>
 						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
-						<td>
-							{{event.user.first_name}} {{event.user.last_name}}
-						</td>
+						<td>{{event.user.first_name}} {{event.user.last_name}}</td>
 						<td>
 							<!-- if statment for might need to encomus lines 41-44 -->
 						</td>
 					</tr>
-					{% endfor %}
+					{% endfor %} {% else %}
+					<tr>
+						<td>None</td>
+						<td>None</td>
+						<td>None</td>
+						<td>None</td>
+					</tr>
+					{% endif %}
 				</tbody>
 			</table>
 			<br />
@@ -71,24 +74,27 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for event in events_future %}
-
+					{% if events_future | length > 0 %} {% for event in events_future %}
 					<tr>
 						<td>{{event.name}}</td>
 						<td>{{event.location}}</td>
 						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
-						<td>
-							{{event.user.first_name}} {{event.user.last_name}}
-						</td>
+						<td>{{event.user.first_name}} {{event.user.last_name}}</td>
 						<td>
 							<!-- if statment for might need to encomus lines 41-44 -->
 						</td>
 					</tr>
-					{% endfor %}
+					{% endfor %} {% else %}
+					<tr>
+						<td>None</td>
+						<td>None</td>
+						<td>None</td>
+						<td>None</td>
+					</tr>
+					{% endif %}
 				</tbody>
 			</table>
-			<a href="/new_event" class="'btn btn-primary p-2"> Add New Event</a>
-			<br>
+			<br />
 			<table class="table table-hover p-7">
 				<thead>
 					<p class="mt-5">All Past Events:</p>
@@ -100,20 +106,24 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for event in events_past %}
-
+					{% if events_past | length > 0 %} {% for event in events_past %}
 					<tr>
 						<td>{{event.name}}</td>
 						<td>{{event.location}}</td>
 						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
-						<td>
-							{{event.user.first_name}} {{event.user.last_name}}
-						</td>
+						<td>{{event.user.first_name}} {{event.user.last_name}}</td>
 						<td>
 							<!-- if statment for might need to encomus lines 41-44 -->
 						</td>
 					</tr>
-					{% endfor %}
+					{% endfor %} {% else %}
+					<tr>
+						<td>None</td>
+						<td>None</td>
+						<td>None</td>
+						<td>None</td>
+					</tr>
+					{% endif %}
 				</tbody>
 			</table>
 		</div>
