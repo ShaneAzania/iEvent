@@ -31,7 +31,10 @@
 			<h1>Welcome {{first_name}}!</h1>
 			<table class="table table-hover">
 				<thead>
-					<p>Today is {{todays_date.strftime('%m/%d/%Y')}} and you have {{events_today | length}} event today:</p>
+					<p>
+						Today is {{todays_date.strftime('%m/%d/%Y')}} and you
+						have {{events_today | length}} event today:
+					</p>
 					<tr>
 						<th>Event Name</th>
 						<th>Location</th>
@@ -68,7 +71,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for event in events %}
+					{% for event in events_future %}
 
 					<tr>
 						<td>{{event.name}}</td>
@@ -85,6 +88,34 @@
 				</tbody>
 			</table>
 			<a href="/new_event" class="'btn btn-primary p-2"> Add New Event</a>
+			<br>
+			<table class="table table-hover p-7">
+				<thead>
+					<p class="mt-5">All Past Events:</p>
+					<tr>
+						<th>Event Name</th>
+						<th>Location</th>
+						<th>Day & Time</th>
+						<th>Creator</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for event in events_past %}
+
+					<tr>
+						<td>{{event.name}}</td>
+						<td>{{event.location}}</td>
+						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
+						<td>
+							{{event.user.first_name}} {{event.user.last_name}}
+						</td>
+						<td>
+							<!-- if statment for might need to encomus lines 41-44 -->
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 		</div>
 
 		<script src="{{ url_for('static', filename='bootstrap/bootstrap.bundle.js') }}"></script>

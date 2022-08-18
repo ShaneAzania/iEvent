@@ -97,14 +97,16 @@ def user_logout():
 @app.route('/user_dash')
 def user_dash():
     if 'user_id' in session:
-        events = event.Event.get_all_events()
+        events_past = event.Event.get_all_events_past()
+        events_all = event.Event.get_all_events()
         events_today = []
-        for e in events:
+        events_future = event.Event.get_all_events_future()
+        for e in events_future:
             print('todays date'.upper(), todays_date.strftime('%m/%d/%Y'))
             print('event date'.upper(), e.time.strftime('%m/%d/%Y'))
             print()
             if e.time.strftime('%m/%d/%Y') == todays_date.strftime('%m/%d/%Y'):
                 events_today.append(e)
-        return render_template('user_dash.html', nav = nav_render(), events = events, events_today = events_today, todays_date = todays_date)
+        return render_template('user_dash.html', nav = nav_render(), events_future = events_future, events_today = events_today, events_past = events_past, todays_date = todays_date)
     else:
         return redirect('/user_login')
