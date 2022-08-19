@@ -95,3 +95,17 @@ def event_delete_attendee(id):
     event = Event.get_one_event(data)
     return render_template('event_details.html', nav = nav_render(), event = event, attendees = event.attendees)
 
+@app.route('/event_delete/<int:id>')
+def event_delete(id):
+    data = {
+        'id':id,
+        'event_id':id,
+        'user_id':session['user_id']
+    }
+    this_event = Event.get_one_event(data)
+    if "user_id" in session:
+        if session['user_id'] == this_event.user_id:
+            Event.delete(data)
+        return redirect(f'/user_dash')
+    else:
+        return redirect(f'/event_details/{id}')

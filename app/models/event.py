@@ -106,9 +106,13 @@ class Event:
             return connectToMySQL(cls.db).query_db(query, event)
 
     @classmethod 
-    def destroy(cls,event):
+    def delete(cls,data):
+        # delete events_with_attendees pair
+        query = " DELETE FROM events_with_attendees WHERE event_id=%(event_id)s;"
+        connectToMySQL(cls.db).query_db(query, data)
+        # delete event
         query = " DELETE FROM events WHERE id=%(id)s;"
-        return connectToMySQL(cls.db).query_db(query, event)
+        return connectToMySQL(cls.db).query_db(query, data)
 
     @classmethod 
     def add_attendee(cls,event):
