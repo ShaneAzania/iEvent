@@ -10,11 +10,13 @@ todays_date = datetime.datetime.now()
 from app.assets.repeat_page_elements import nav_render
 
 
+# new_event
 @app.route('/new_event')
 def new_event():
     if 'user_id' not in session:
         return redirect('/user_login')
     return render_template('event_add.html', nav = nav_render())
+# new_event_form
 @app.route('/new_event_form', methods = ['POST'])
 def new_event_form():
     if 'user_id' not in session:
@@ -31,11 +33,44 @@ def new_event_form():
     Event.save(data)
     return redirect('/user_dash')
 
+# event_details
 @app.route('/event_details/<int:id>')
 def event_details(id):
     event = Event.get_one_event({'id':id})
     return render_template('event_details.html', nav = nav_render(), event = event, attendees = event.attendees)
 
+# event_edit
+@app.route('/event_edit/<int:id>')
+def event_edit(id):
+    event = Event.get_one_event({'id':id})
+    return render_template('event_edit.html', nav = nav_render(), event = event)
+# new_event_form
+@app.route('/event_edit_form', methods = ['POST'])
+def event_edit_form():
+    if 'user_id' not in session:
+        return redirect ('/user_login')
+    data = {
+        'id':request.form['id']
+    }
+    this_event = Event.get_one_event(data)
+    if session['user_id'] != this_event.user_id:
+        print()
+        print('UPDATE EVENT FAILED')
+        print()
+        return redirect (f"/event_details/{data['id']}")
+    if not Event.validate_event(request.form):
+        return redirect (f"/event_details/{data['id']}")
+    data = {
+        'id': request.form['id'],
+        'name': request.form['name'],
+        'information': request.form['information'],
+        'location': request.form['location'],
+        'time': request.form['time']
+    }
+    Event.update(data)
+    return redirect(f'/event_details/{data["id"]}')
+
+# event_add_attendee
 @app.route('/event_add_attendee/<int:id>')
 def event_add_attendee(id):
     data = {
@@ -46,6 +81,7 @@ def event_add_attendee(id):
     Event.add_attendee(data)
     event = Event.get_one_event(data)
     return render_template('event_details.html', nav = nav_render(), event = event, attendees = event.attendees)
+# event_delete_attendee
 @app.route('/event_delete_attendee/<int:id>')
 def event_delete_attendee(id):
     if 'user_id' not in session:

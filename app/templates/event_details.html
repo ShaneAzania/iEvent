@@ -21,10 +21,15 @@
 			{% endfor %} {% endif %} {% endwith %}
 		</div>
 		<div class="container-fluid">
-			<h1 class="m-0">{{event.name}}</h1>
-			<h6 class="mb-5">{{event.user.first_name}} {{event.user.last_name}}</h6>
-			<div class="row">
-				<div class="col-12 col-lg-6">
+            <div class="row">
+                <div class="col-12 col-lg-6">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h1 class="d-inline-block m-0">{{event.name}}</h1>
+						{% if session['user_id'] == event.user_id %}
+						<a href="/event_edit/{{event.id}}" class="btn btn-primary btn-sm">Edit Event</a>
+						{% endif %}
+					</div>
+                    <h6 class="mb-5">{{event.user.first_name}} {{event.user.last_name}}</h6>
 					<div>
 						Date: {{event.time.strftime('%m/%d/%Y')}} <br />
 						Time: {{event.time.strftime('%I:%M:%p')}}
@@ -37,18 +42,13 @@
 					<hr />
 					<div>
 						<div class="d-flex">
-							Attendees
-                            {% if attendees and 'user_id' in session %}
-                                {% set attendees_ids = [] %}
-                                {% for user in attendees %}
-                                    <!-- {{attendees_ids.append(user.id)}} -->
-                                {% endfor %}
-                                {% if session['user_id'] in attendees_ids %}
-                                <a href="/event_delete_attendee/{{event.id}}" class="btn btn-primary ms-auto">Unattend</a>
-                                {% else %}
-                                <a href="/event_add_attendee/{{event.id}}" class="btn btn-primary ms-auto">Attend</a>
-                                {% endif %}                                
-                            {% endif %}
+							Attendees {% if attendees and 'user_id' in session %} {% set attendees_ids = [] %} {% for user in attendees %}
+							<!-- {{attendees_ids.append(user.id)}} -->
+							{% endfor %} {% if session['user_id'] in attendees_ids %}
+							<a href="/event_delete_attendee/{{event.id}}" class="btn btn-primary btn-sm ms-auto">Unattend</a>
+							{% else %}
+							<a href="/event_add_attendee/{{event.id}}" class="btn btn-primary btn-sm ms-auto">Attend</a>
+							{% endif %} {% endif %}
 						</div>
 						<div>
 							{% if attendees %} {% for user in attendees %}

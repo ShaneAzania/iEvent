@@ -102,7 +102,7 @@ class Event:
 
     @classmethod 
     def update(cls,event):
-            query = "UPDATE events SET name=%(name)s,location=%(location)s,attendees=%(attendees)s,attendees_confirmed=%(attendees_confirmed)s,time=%(time)s,updated_at=NOW() WHERE id = %(id)s;"
+            query = "UPDATE events SET name=%(name)s,information=%(information)s,location=%(location)s,time=%(time)s,updated_at=NOW() WHERE id = %(id)s;"
             return connectToMySQL(cls.db).query_db(query, event)
 
     @classmethod 
