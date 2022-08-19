@@ -1,3 +1,5 @@
+from hashlib import new
+from posixpath import split
 from app import app
 from flask import flash, render_template,redirect,request,session
 from app.models.user import User
@@ -37,10 +39,17 @@ def new_event_form():
 @app.route('/event_details/<int:id>')
 def event_details(id):
     event = Event.get_one_event({'id':id})
-    print()
-    print('ATTENDEE', event.attendees[0].first_name)
-    print()
-    return render_template('event_details.html', nav = nav_render(), event = event, attendees = event.attendees)
+    new_location_string = ''
+    for element in event.location.split(','):
+        new_element = ''
+        for char in element:
+            if char == ' ':
+                new_element += '%20'
+            else:
+                new_element += char
+        new_location_string += new_element
+
+    return render_template('event_details.html', nav = nav_render(), event = event, attendees = event.attendees, location = new_location_string)
 
 # event_edit
 @app.route('/event_edit/<int:id>')
@@ -97,7 +106,7 @@ def event_delete_attendee(id):
     Event.delete_attendee(data)
     event = Event.get_one_event(data)
     return redirect(f'/event_details/{id}')
-
+# event_delete
 @app.route('/event_delete/<int:id>')
 def event_delete(id):
     data = {
