@@ -120,7 +120,6 @@ class Event:
         query = "SELECT * FROM events_with_attendees WHERE event_id = %(event_id)s AND user_id = %(user_id)s;"
         result = connectToMySQL(cls.db).query_db(query, event)
         if result:
-            print('PAIR ALREADY EXISTS')
             return
         else:
             # if pair does not exist, create it
@@ -136,7 +135,7 @@ class Event:
             query = "DELETE FROM events_with_attendees WHERE event_id = %(event_id)s AND user_id = %(user_id)s;"
             return connectToMySQL(cls.db).query_db(query, event)
         else:
-            print('PAIR DOES NOT EXIST EXISTS')
+            print('PAIR DOES NOT EXIST EXIST')
             return
 
 # ************************** validation 

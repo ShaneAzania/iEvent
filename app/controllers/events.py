@@ -37,6 +37,9 @@ def new_event_form():
 @app.route('/event_details/<int:id>')
 def event_details(id):
     event = Event.get_one_event({'id':id})
+    print()
+    print('ATTENDEE', event.attendees[0].first_name)
+    print()
     return render_template('event_details.html', nav = nav_render(), event = event, attendees = event.attendees)
 
 # event_edit
@@ -80,7 +83,7 @@ def event_add_attendee(id):
     }
     Event.add_attendee(data)
     event = Event.get_one_event(data)
-    return render_template('event_details.html', nav = nav_render(), event = event, attendees = event.attendees)
+    return redirect(f'/event_details/{id}')
 # event_delete_attendee
 @app.route('/event_delete_attendee/<int:id>')
 def event_delete_attendee(id):
@@ -93,7 +96,7 @@ def event_delete_attendee(id):
     }
     Event.delete_attendee(data)
     event = Event.get_one_event(data)
-    return render_template('event_details.html', nav = nav_render(), event = event, attendees = event.attendees)
+    return redirect(f'/event_details/{id}')
 
 @app.route('/event_delete/<int:id>')
 def event_delete(id):

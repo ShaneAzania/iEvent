@@ -55,9 +55,11 @@
 					<div>
 						<div class="d-flex">Attendees</div>
 						<div>
-							{% if attendees %} {% for user in attendees %}
+							{% if attendees[0].first_name is not none %} 
+							{% for user in attendees %}
 							<p>{{user.first_name}} {{user.last_name}}</p>
-							{% endfor %} {% else %}
+							{% endfor %}
+							{% else %}
 							<p>None yet</p>
 							{% endif %}
 						</div>
