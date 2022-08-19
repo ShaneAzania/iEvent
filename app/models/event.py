@@ -1,5 +1,3 @@
-from sqlite3 import dbapi2
-from unittest import result
 from app.config.mysqlconnection import connectToMySQL
 from flask import flash
 from app.models import user 
@@ -12,12 +10,12 @@ class Event:
         self.name = db_data['name']
         self.information = db_data['information']
         self.location = db_data['location']
-        self.attendees = db_data['attendees']
-        self.attendees_confirmed = db_data['attendees_confirmed']
         self.time = db_data['time']
         self.created_at = db_data['created_at']
         self.updated_at = db_data['updated_at']
+        self.user_id = db_data['user_id']
         self.user = None
+        self.attendees = []
 
 
     @classmethod 
@@ -53,6 +51,7 @@ class Event:
         return all_events 
     @classmethod 
     def get_all_events_past(cls):
+        # get events with user (one to many)
         query = "SELECT * FROM events LEFT JOIN users ON events.user_id = users.id WHERE time < now() ORDER BY time ASC;"
         results = connectToMySQL(cls.db).query_db(query)
         all_events = []
@@ -67,34 +66,39 @@ class Event:
 
     @classmethod 
     def get_one_event(cls, event):
-        query = " SLECT * FROM events WHERE id = %(id)s;"
+        query = " SELECT * FROM events WHERE events.id = %(id)s;"
         results = connectToMySQL(cls.db).query_db(query,event)
-        return cls(results[0])
+        this_event = cls(results[0])
+        # get event creator user object
+        this_event.user = user.User.get_one({'id': this_event.user_id})
 
-    # @classmethod 
-    # def get_all_events_with_users(cls,data):
-    #     query = "SELECT * FROM events JOIN users on events.user_id = users.id"
-    #     results = connectToMySQL(cls.db).query_db(query,data)
-    #     if len(results) == 0:
-    #         return []
-    #     else: 
-    #         all_event_instances = []
-    #         for current_event_dic in results: 
-    #             event_instance = cls(current_event_dic)
-    #             new_event_dic ={
-    #                 "id": current_event_dic['users.id'],
-    #                 "first_name": current_event_dic['first_name'],
-    #                 "last_name": current_event_dic['last_name'],
-    #                 "email": current_event_dic['email'],
-    #                 "password": current_event_dic['password'],
-    #                 "confirm_password": current_event_dic['confirm_password'],
-    #                 "created_at": current_event_dic['users.created_at'],
-    #                 "updated_at": current_event_dic['users.updated_at'],
-    #             }
-    #             user_instance = user.User(new_event_dic)
-    #             event_instance.user = user_instance
-    #             all_event_instances.append(event_instance)
-    #         return all_event_instances
+        # GET ATTENDEES for this event (many to many)
+        query_attendees = ""\
+            "SELECT * FROM events "\
+            "LEFT JOIN events_with_attendees ON events.id = events_with_attendees.event_id "\
+            "LEFT JOIN users ON events_with_attendees.user_id = users.id "\
+            "WHERE events.id = %(id)s "\
+            "ORDER BY time ASC;"
+        results_attendees = connectToMySQL(cls.db).query_db(query_attendees, event)
+        for attendee in results_attendees:
+            # arrange data
+            data = {
+                'id': attendee['users.id'],
+                'first_name': attendee['first_name'],
+                'last_name': attendee['last_name'],
+                'email': attendee['email'],
+                'password': attendee['password'],
+                'created_at': attendee['users.created_at'],
+                'updated_at': attendee['users.updated_at']
+            }
+            # create user object
+            this_user = user.User(data)
+
+            #  append this user object to 'attendees' list
+            this_event.attendees.append(this_user)
+        # END GET ATTENDEES
+
+        return this_event
 
     @classmethod 
     def update(cls,event):
@@ -102,9 +106,34 @@ class Event:
             return connectToMySQL(cls.db).query_db(query, event)
 
     @classmethod 
-    def destroy (cls,event):
+    def destroy(cls,event):
         query = " DELETE FROM events WHERE id=%(id)s;"
         return connectToMySQL(cls.db).query_db(query, event)
+
+    @classmethod 
+    def add_attendee(cls,event):
+        # check if pair exists
+        query = "SELECT * FROM events_with_attendees WHERE event_id = %(event_id)s AND user_id = %(user_id)s;"
+        result = connectToMySQL(cls.db).query_db(query, event)
+        if result:
+            print('PAIR ALREADY EXISTS')
+            return
+        else:
+            # if pair does not exist, create it
+            query = "INSERT INTO events_with_attendees(event_id, user_id) VALUES (%(event_id)s, %(user_id)s);"
+            return connectToMySQL(cls.db).query_db(query, event)
+    @classmethod 
+    def delete_attendee(cls,event):
+        # check if pair exists
+        query = "SELECT * FROM events_with_attendees WHERE event_id = %(event_id)s AND user_id = %(user_id)s;"
+        result = connectToMySQL(cls.db).query_db(query, event)
+        if result:
+            # if pair exist, delete it
+            query = "DELETE FROM events_with_attendees WHERE event_id = %(event_id)s AND user_id = %(user_id)s;"
+            return connectToMySQL(cls.db).query_db(query, event)
+        else:
+            print('PAIR DOES NOT EXIST EXISTS')
+            return
 
 # ************************** validation 
 # time validation will need updated and we need to add attendees etc. 

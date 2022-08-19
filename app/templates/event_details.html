@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="{{ url_for('static',filename='bootstrap/bootstrap.css') }}" />
+		<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}" />
+		<title>{{title}}</title>
+	</head>
+	<body id="">
+		<!-- display nav component -->
+		{{nav | safe}}
+
+		<div class="errors">
+			{% with messages = get_flashed_messages() %}<!-- declare a variable called messages -->
+			{% if messages %}<!-- check if there are any messages -->
+			{% for message in messages %}<!-- loop through the messages -->
+			<p>{{message}}</p>
+			<!-- display each message in a paragraph tag -->
+			{% endfor %} {% endif %} {% endwith %}
+		</div>
+		<div class="container-fluid">
+			<h1 class="m-0">{{event.name}}</h1>
+			<h6 class="mb-5">{{event.user.first_name}} {{event.user.last_name}}</h6>
+			<div class="row">
+				<div class="col-12 col-lg-6">
+					<div>
+						Date: {{event.time.strftime('%m/%d/%Y')}} <br />
+						Time: {{event.time.strftime('%I:%M:%p')}}
+					</div>
+					<hr />
+					<div>
+						Info <br />
+						{{event.information}}
+					</div>
+					<hr />
+					<div>
+						<div class="d-flex">
+							Attendees
+                            {% if attendees and 'user_id' in session %}
+                                {% set attendees_ids = [] %}
+                                {% for user in attendees %}
+                                    <!-- {{attendees_ids.append(user.id)}} -->
+                                {% endfor %}
+                                {% if session['user_id'] in attendees_ids %}
+                                <a href="/event_delete_attendee/{{event.id}}" class="btn btn-primary ms-auto">Unattend</a>
+                                {% else %}
+                                <a href="/event_add_attendee/{{event.id}}" class="btn btn-primary ms-auto">Attend</a>
+                                {% endif %}                                
+                            {% endif %}
+						</div>
+						<div>
+							{% if attendees %} {% for user in attendees %}
+							<p>{{user.first_name}} {{user.last_name}}</p>
+							{% endfor %} {% else %}
+							<p>None yet</p>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="{{ url_for('static', filename='bootstrap/bootstrap.bundle.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+	</body>
+</html>

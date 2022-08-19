@@ -44,7 +44,7 @@
 				<tbody>
 					{% if events_today | length > 0 %} {% for event in events_today %}
 					<tr>
-						<td>{{event.name}}</td>
+						<td><a href="/event_details/{{event.id}}">{{event.name}}</a></td>
 						<td>{{event.location}}</td>
 						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
 						<td>{{event.user.first_name}} {{event.user.last_name}}</td>
@@ -76,7 +76,7 @@
 				<tbody>
 					{% if events_future | length > 0 %} {% for event in events_future %}
 					<tr>
-						<td>{{event.name}}</td>
+						<td><a href="/event_details/{{event.id}}">{{event.name}}</a></td>
 						<td>{{event.location}}</td>
 						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
 						<td>{{event.user.first_name}} {{event.user.last_name}}</td>
@@ -108,7 +108,7 @@
 				<tbody>
 					{% if events_past | length > 0 %} {% for event in events_past %}
 					<tr>
-						<td>{{event.name}}</td>
+						<td><a href="/event_details/{{event.id}}">{{event.name}}</a></td>
 						<td>{{event.location}}</td>
 						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
 						<td>{{event.user.first_name}} {{event.user.last_name}}</td>
