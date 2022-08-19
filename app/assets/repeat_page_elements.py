@@ -63,7 +63,7 @@ def nav_render(data = {}):
 							'</form>'\
 						'</li>'\
 						'<li class="nav-item">'\
-							'<a class="nav-link" href="/">Home</a>'\
+							'<!--a class="nav-link" href="/">Home</a-->'\
 						'</li>'\
 						'<!-- Nav links that show up when logged in as a user -->'\
 						f'{logged_in_links}'\

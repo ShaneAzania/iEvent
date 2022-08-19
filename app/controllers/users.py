@@ -12,7 +12,7 @@ from app.assets.repeat_page_elements import nav_render
 #Home
 @app.route('/')
 def index():
-    return render_template('index.html', nav = nav_render())
+    return redirect('/user_login')
 
 #join
 @app.route('/user_join')
