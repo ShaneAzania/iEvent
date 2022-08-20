@@ -107,6 +107,9 @@ class Event:
 
     @classmethod 
     def delete(cls,data):
+        # delete messages associated with this event
+        query = " DELETE FROM messages WHERE event_id=%(event_id)s;"
+        connectToMySQL(cls.db).query_db(query, data)
         # delete events_with_attendees pair
         query = " DELETE FROM events_with_attendees WHERE event_id=%(event_id)s;"
         connectToMySQL(cls.db).query_db(query, data)
@@ -146,7 +149,7 @@ class Event:
         is_valid = True 
         if len(event['name']) < 2:
             is_valid = False
-            flash("Evnet first name must be at least 2 characters","event")
+            flash("Evnet name must be at least 2 characters","event")
         if len(event['location']) < 2:
             is_valid = False
             flash("Location must be at least 2 characters","event")

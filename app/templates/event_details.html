@@ -81,6 +81,41 @@
 					</div>
 				</div>
 			</div>
+			<div class="row">
+				<div id="message-board" class="col-12 col-lg-6">
+					Messages: <br />
+					{% if messages %}
+					<ul>
+						{% for m in messages %}
+						<li>
+							<div class="d-flex justify-content-between">
+								<p>{{m.user.first_name}} {{m.user.last_name}}:</p>
+								<p>
+									<!-- if current user is message owner show delete option -->
+									{{m.created_at.strftime('%m/%d/%Y')}} {% if session['user_id'] == m.user.id %}
+									<a class="text-danger" href="/message_delete/{{m.id}}/{{event.id}}">Delete</a>
+									{% endif %}
+								</p>
+							</div>
+							<p class="ps-3">{{m.message}}</p>
+						</li>
+						{% endfor %}
+					</ul>
+					{% else %}
+					<p>No messages</p>
+					{% endif %}
+				</div>
+				<div id="messag-form" class="col-12 col-lg-6">
+					<form class="col-12" action="/message_create_form" method="post">
+						<div class="mb-3">
+							<label for="message" class="form-label">New message:</label>
+							<textarea class="form-control" name="message" rows="3"></textarea>
+						</div>
+						<input type="text" class="form-control" name="event_id" value="{{event.id}}" readonly hidden />
+						<button type="submit" class="btn btn-primary">Send</button>
+					</form>
+				</div>
+			</div>
 		</div>
 
 		<script src="{{ url_for('static', filename='bootstrap/bootstrap.bundle.js') }}"></script>

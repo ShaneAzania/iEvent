@@ -2,7 +2,7 @@ from hashlib import new
 from posixpath import split
 from app import app
 from flask import flash, render_template,redirect,request,session
-from app.models.user import User
+from app.models import message
 from app.models.event import Event
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
@@ -38,7 +38,9 @@ def new_event_form():
 # event_details
 @app.route('/event_details/<int:id>')
 def event_details(id):
+    # collect event object
     event = Event.get_one_event({'id':id})
+    # format location string for html link
     new_location_string = ''
     for element in event.location.split(','):
         new_element = ''
@@ -48,8 +50,18 @@ def event_details(id):
             else:
                 new_element += char
         new_location_string += new_element
+    # collect messages
+    messages = message.Message.get_all_messages_for_event({"event_id":id})
+    # print()
+    # print('MESSAGES', messages[0])
 
-    return render_template('event_details.html', nav = nav_render(), event = event, attendees = event.attendees, location = new_location_string)
+    return render_template(
+        'event_details.html', nav = nav_render(), 
+        attendees = event.attendees, 
+        event = event, 
+        messages = messages, 
+        location = new_location_string
+    )
 
 # event_edit
 @app.route('/event_edit/<int:id>')
