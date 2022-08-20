@@ -135,3 +135,14 @@ def event_delete(id):
         return redirect(f'/user_dash')
     else:
         return redirect(f'/event_details/{id}')
+
+
+@app.route('/event_search')
+def event_search():
+    if 'user_id' in session:
+        events_past = Event.get_all_events_past()
+        events_today = []
+        events_future = Event.get_all_events_future()
+        return render_template('event_search.html', nav = nav_render(), events_future = events_future, events_today = events_today, events_past = events_past, todays_date = todays_date)
+    else:
+        return redirect('/user_login')

@@ -160,4 +160,3 @@ class Event:
         #     is_valid = False
         #     flash("Attendees must be at greater than 1","event")
         return is_valid  
-       

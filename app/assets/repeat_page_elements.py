@@ -31,6 +31,11 @@ def nav_render(data = {}):
 									'Add Event'\
 								'</a>'\
 							'</li>'\
+								'<li class="nav-item">'\
+								'<a class="nav-link" href="/event_search">'\
+									'Search'\
+								'</a>'\
+							'</li>'\
 							'<!--li class="nav-item">'\
 								'<a class="nav-link" href="/new_event">'\
 									''\

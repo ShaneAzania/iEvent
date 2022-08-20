@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="{{ url_for('static',filename='bootstrap/bootstrap.css') }}" />
+		<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}" />
+		<title>{{title}}</title>
+	</head>
+	<body id="">
+		<!-- display nav component -->
+		{{nav | safe}}
+
+		<div class="errors">
+			{% with messages = get_flashed_messages() %}<!-- declare a variable called messages -->
+			{% if messages %}<!-- check if there are any messages -->
+			{% for message in messages %}<!-- loop through the messages -->
+			<p>{{message}}</p>
+			<!-- display each message in a paragraph tag -->
+			{% endfor %} {% endif %} {% endwith %}
+		</div>
+
+		<div class="container-fluid col-8 mx-auto">
+			<h1>Welcome {{first_name}}! TESTING </h1>
+			<br />
+			<table class="table table-hover p-7">
+				<thead>
+					<p>Search Events:</p>
+					<tr>
+						<th>Event Name</th>
+						<th>Location</th>
+						<th>Day & Time</th>
+						<th>Creator</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% if events_future | length > 0 %} {% for event in events_future %}
+					<tr>
+						<td><a href="/event_details/{{event.id}}">{{event.name}}</a></td>
+						<td>{{event.location}}</td>
+						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
+						<td>{{event.user.first_name}} {{event.user.last_name}}</td>
+					</tr>
+					{% endfor %} {% else %}
+					{% endif %}
+				</tbody>
+			</table>
+		<script src="{{ url_for('static', filename='bootstrap/bootstrap.bundle.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+	</body>
+</html>
