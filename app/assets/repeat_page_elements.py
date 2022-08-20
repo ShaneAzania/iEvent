@@ -59,14 +59,13 @@ def nav_render(data = {}):
 				'<div class="collapse navbar-collapse" id="navbarNav">'\
 					'<ul class="navbar-nav ms-auto">'\
 						'<!-- search  -->'\
-						'<li class="nav-item me-2">'\
+						'<!--li class="nav-item me-2">'\
 							'<form action="/images_search" method="post">'\
 								'<div class="input-group mt-1">'\
 									f'<input name="search" type="text" class="form-control" placeholder="Search" value="{search_string}">'\
-									'<!-- <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button> -->'\
 								'</div>'\
 							'</form>'\
-						'</li>'\
+						'</li-->'\
 						'<li class="nav-item">'\
 							'<!--a class="nav-link" href="/">Home</a-->'\
 						'</li>'\
