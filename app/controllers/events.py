@@ -47,6 +47,8 @@ def event_details(id):
         for char in element:
             if char == ' ':
                 new_element += '%20'
+            if char == '#':
+                new_element += 'Apt '
             else:
                 new_element += char
         new_location_string += new_element

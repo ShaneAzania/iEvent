@@ -92,9 +92,11 @@
 								<p>{{m.user.first_name}} {{m.user.last_name}}:</p>
 								<p>
 									<!-- if current user is message owner show delete option -->
-									{{m.created_at.strftime('%m/%d/%Y')}} {% if session['user_id'] == m.user.id %}
+									{% if session['user_id'] == m.user.id %}
 									<a class="text-danger" href="/message_delete/{{m.id}}/{{event.id}}">Delete</a>
 									{% endif %}
+									<!-- message date -->
+									{{m.created_at.strftime('%m/%d/%Y')}}
 								</p>
 							</div>
 							<p class="ps-3">{{m.message}}</p>
