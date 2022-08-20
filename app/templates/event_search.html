@@ -35,7 +35,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% if events_future | length > 0 %} {% for event in events_future %}
+					{% if events_all | length > 0 %} {% for event in events_all %}
 					<tr>
 						<td><a href="/event_details/{{event.id}}">{{event.name}}</a></td>
 						<td>{{event.location}}</td>

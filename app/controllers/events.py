@@ -140,9 +140,14 @@ def event_delete(id):
 @app.route('/event_search')
 def event_search():
     if 'user_id' in session:
-        events_past = Event.get_all_events_past()
-        events_today = []
-        events_future = Event.get_all_events_future()
-        return render_template('event_search.html', nav = nav_render(), events_future = events_future, events_today = events_today, events_past = events_past, todays_date = todays_date)
+        events_all = Event.get_all_events()
+        return render_template('event_search.html', nav = nav_render(), events_all = events_all)
     else:
         return redirect('/user_login')
+
+
+    #     def search_func(lst, x):
+    # if lst and x in lst: # test for emptiness and for membership
+    #     return "success"
+    # else:
+    #     return "failure"
