@@ -1,6 +1,7 @@
 from app.config.mysqlconnection import connectToMySQL
 from flask import flash
 from app.models import user 
+import re
 
 class Event: 
     db = "iSport"
@@ -140,6 +141,20 @@ class Event:
         else:
             print('PAIR DOES NOT EXIST EXIST')
             return
+
+# regex findall()
+@classmethod
+def search_event(pattern,string,flags=0):
+    s = '',
+    pattern = '\d+',
+    match = re.findall(pattern,s)
+    if match is not None:
+        print(match.group())
+    else:
+        print('No match found')
+
+
+
 
 # ************************** validation 
 # time validation will need updated and we need to add attendees etc. 

@@ -46,7 +46,7 @@
 				<tbody>
 					{% if events_all | length > 0 %} {% for event in events_all %}
 					<tr>
-						<td><a href="/event_details/{{event.id}}">{{event.name}}</a></td>
+						<td><a href="/event_search/{{event.id}}">{{event.name}}</a></td>
 						<td>{{event.location}}</td>
 						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
 						<td>{{event.user.first_name}} {{event.user.last_name}}</td>
