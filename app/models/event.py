@@ -11,16 +11,16 @@ class Event:
         self.information = db_data['information']
         self.location = db_data['location']
         self.time = db_data['time']
+        self.attendee_limit = db_data['attendee_limit']
         self.created_at = db_data['created_at']
         self.updated_at = db_data['updated_at']
         self.user_id = db_data['user_id']
         self.user = None
         self.attendees = []
 
-
     @classmethod 
     def save(cls,event):
-        query = "INSERT INTO events(name,information,location,time,user_id) VALUES (%(name)s, %(information)s, %(location)s, %(time)s, %(user_id)s);"
+        query = "INSERT INTO events(name,information,location,time,attendee_limit,user_id) VALUES (%(name)s, %(information)s, %(location)s, %(time)s,%(attendee_limit)s,%(user_id)s);"
         return connectToMySQL(cls.db).query_db(query, event)
 
     @classmethod 
@@ -102,7 +102,7 @@ class Event:
 
     @classmethod 
     def update(cls,event):
-            query = "UPDATE events SET name=%(name)s,information=%(information)s,location=%(location)s,time=%(time)s,updated_at=NOW() WHERE id = %(id)s;"
+            query = "UPDATE events SET name=%(name)s,information=%(information)s,location=%(location)s,time=%(time)s, attendee_limit=%(attendee_limit)s,updated_at=NOW() WHERE id = %(id)s;"
             return connectToMySQL(cls.db).query_db(query, event)
 
     @classmethod 
@@ -119,15 +119,36 @@ class Event:
 
     @classmethod 
     def add_attendee(cls,event):
-        # check if pair exists
+        # check the current attendee limit
+        query = "SELECT * FROM events WHERE id = %(event_id)s;"
+        result = connectToMySQL(cls.db).query_db(query, event)
+        this_event = cls.get_one_event(result[0])
+        attendee_limit = this_event.attendee_limit
+        # check the current number of attendees
+        query = "SELECT * FROM events_with_attendees WHERE event_id = %(event_id)s;"
+        result = connectToMySQL(cls.db).query_db(query, event)
+        attendee_quantity = len(result)
+
+        print('ATTENDEE LIMIT:', attendee_limit)
+        print('ATTENDEE QUANTITY:', attendee_quantity)
+
+        # check if this user is a current attendee
         query = "SELECT * FROM events_with_attendees WHERE event_id = %(event_id)s AND user_id = %(user_id)s;"
         result = connectToMySQL(cls.db).query_db(query, event)
         if result:
-            return
-        else:
-            # if pair does not exist, create it
+            return False
+        elif attendee_limit <= attendee_quantity:
+            flash('Sorry, attendee limit reached.')
+            return False
+        elif attendee_limit > attendee_quantity:
+            # if this user is not a current attendee and attendee_limit is not reached, create the row
             query = "INSERT INTO events_with_attendees(event_id, user_id) VALUES (%(event_id)s, %(user_id)s);"
-            return connectToMySQL(cls.db).query_db(query, event)
+            connectToMySQL(cls.db).query_db(query, event)
+            # check the current number of attendees after the insert into the database
+            query = "SELECT * FROM events_with_attendees WHERE event_id = %(event_id)s;"
+            result = connectToMySQL(cls.db).query_db(query, event)
+            print('ATTENDEE QUANTITY AFTER INSERT INTO DATABASE:', len(result))
+            return 
     @classmethod 
     def delete_attendee(cls,event):
         # check if pair exists
@@ -158,6 +179,9 @@ class Event:
         if len(event['time']) < 4:
             is_valid = False
             flash("Time must be at least 4 characters","event")
+        if int(event['attendee_limit']) < 1:
+            is_valid = False
+            flash("Attendee Limit Must be greater than 0","event")
         # if len(event['attendees']) < 1:
         #     is_valid = False
         #     flash("Attendees must be at greater than 1","event") 

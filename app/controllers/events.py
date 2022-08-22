@@ -1,4 +1,3 @@
-from hashlib import new
 from sqlite3 import Date
 from posixpath import split
 from app import app
@@ -31,7 +30,7 @@ def new_event_form():
         'information': request.form['information'],
         'location': request.form['location'],
         'time': request.form['time'],
-        #add attendee limit 
+        'attendee_limit': request.form['attendee_limit'],
         'user_id': session['user_id']
     }
     Event.save(data)
@@ -93,7 +92,8 @@ def event_edit_form():
         'name': request.form['name'],
         'information': request.form['information'],
         'location': request.form['location'],
-        'time': request.form['time']
+        'time': request.form['time'],
+        'attendee_limit': request.form['attendee_limit']
     }
     Event.update(data)
     return redirect(f'/event_details/{data["id"]}')
@@ -101,13 +101,13 @@ def event_edit_form():
 # event_add_attendee
 @app.route('/event_add_attendee/<int:id>')
 def event_add_attendee(id):
-    data = {
-        'id':id,
-        'event_id':id,
-        'user_id':session['user_id']
-    }
-    Event.add_attendee(data)
-    event = Event.get_one_event(data)
+    if 'user_id' in session:
+        data = {
+            'id':id,
+            'event_id':id,
+            'user_id':session['user_id']
+        }
+        Event.add_attendee(data)
     return redirect(f'/event_details/{id}')
 # event_delete_attendee
 @app.route('/event_delete_attendee/<int:id>')
@@ -138,7 +138,7 @@ def event_delete(id):
     else:
         return redirect(f'/event_details/{id}')
 
-
+# event_search
 @app.route('/event_search')
 def event_search():
     if 'user_id' in session:
@@ -146,9 +146,6 @@ def event_search():
         return render_template('event_search.html', nav = nav_render(), events_all = events_all)
     else:
         return redirect('/user_login')
-
-
-#hf just added to main 
 @app.route('/event_search_form', methods = ['POST'])
 def event_search_form():
     if 'user_id' in session:
@@ -197,4 +194,3 @@ def event_search_form():
         )
     else:
         return redirect('/user_login')
-

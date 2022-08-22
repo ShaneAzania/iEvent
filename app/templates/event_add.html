@@ -11,44 +11,45 @@
 	<body id="">
 		<!-- display nav component -->
 		{{nav | safe}}
-		
+
 		<div class="errors">
 			{% with messages = get_flashed_messages() %}<!-- declare a variable called messages -->
-                {% if messages %}<!-- check if there are any messages -->
-                    {% for message in messages %}<!-- loop through the messages -->
-                    <p>{{message}}</p>
-                    <!-- display each message in a paragraph tag -->
-                    {% endfor %} 
-                {% endif %} 
-            {% endwith %}
+			{% if messages %}<!-- check if there are any messages -->
+			{% for message in messages %}<!-- loop through the messages -->
+			<p>{{message}}</p>
+			<!-- display each message in a paragraph tag -->
+			{% endfor %} {% endif %} {% endwith %}
 		</div>
 
 		<div class="container-fluid">
-            <div class="row">
-                <div class="col-12 col-md-8 col-xl-6 mx-auto">
-                    <form action="/new_event_form" method="post">
-                        <div class="form-group">
-                            <label for="name">Event Name: </label>
-                            <input type="text" name="name" class="form-control">
-                        </div>
-                        <div class="form-group">
-                          <label for="" class="form-label">Information:</label>
-                          <textarea class="form-control" name="information" id="information" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="location">Location: </label>
-                            <input type="text" name="location" class="form-control">
-                        </div>
-                        <div class="form-group time">
-                            <label for="time">Date & Time: </label>
-                            <input type="datetime-local" name="time" class="form-control">
-                            <small id="helpId" class="form-text text-muted">Date ( MM/DD/YYYY ) and Time ( HH:MM:AM/PM )</small>
-                        </div>
-                        <input type="submit" value="Add Event" class="btn btn-success">
-                    </form>
-                </div>
-            </div>
-			
+			<div class="row">
+				<div class="col-12 col-md-8 col-xl-6 mx-auto">
+					<form action="/new_event_form" method="post">
+						<div class="form-group">
+							<label for="name">Event Name: </label>
+							<input type="text" name="name" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label for="" class="form-label">Information:</label>
+							<textarea class="form-control" name="information" id="information" rows="3"></textarea>
+						</div>
+						<div class="form-group">
+							<label for="location">Location: </label>
+							<input type="text" name="location" class="form-control" />
+						</div>
+						<div class="form-group time">
+							<label for="time">Date & Time: </label>
+							<input type="datetime-local" name="time" class="form-control" />
+							<small id="helpId" class="form-text text-muted">Date ( MM/DD/YYYY ) and Time ( HH:MM:AM/PM )</small>
+						</div>
+						<div class="form-group time mb-3">
+							<label for="attendee_limit">Attendee Limit: </label>
+							<input type="number" name="attendee_limit" class="form-control" value="0" />
+						</div>
+						<input type="submit" value="Add Event" class="btn btn-success" />
+					</form>
+				</div>
+			</div>
 		</div>
 
 		<script src="{{ url_for('static', filename='bootstrap/bootstrap.bundle.js') }}"></script>

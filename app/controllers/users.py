@@ -22,12 +22,6 @@ def join():
     else:
         return render_template('user_join.html', nav = nav_render())
 
-
-
-
-
-
-
 @app.route('/user_join_form', methods = ['POST'])
 def user_register_form():
     if User.validate_form(request.form):
@@ -68,23 +62,6 @@ def user_login():
     if 'user_id' in session:
         return redirect('/user_dash')
     return render_template('user_login.html', nav = nav_render())
-
-
-
-
-#edit user #####################################
-@app.route('/user_details/<int:id>')
-def edit_user(user_id):
-    if 'user_id' not in session:
-        return redirect ('/logout')
-    user_data = {
-        "id": session[user_id]
-    }
-    return render_template("user_details.html", user=User.get_one(user_id))
-
-
-
-
 @app.route('/user_login_form', methods = ['POST'])
 def user_login_form():
     # Validate User Login
@@ -118,6 +95,16 @@ def user_login_form():
 def user_logout():
     session.clear()
     return redirect('/user_login')
+
+#edit user #####################################
+@app.route('/user_details/<int:id>')
+def edit_user(user_id):
+    if 'user_id' not in session:
+        return redirect ('/logout')
+    user_data = {
+        "id": session[user_id]
+    }
+    return render_template("user_details.html", user=User.get_one(user_id))
 
 #dash
 @app.route('/user_dash')
