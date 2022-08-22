@@ -1,4 +1,5 @@
 from hashlib import new
+from sqlite3 import Date
 from posixpath import split
 from app import app
 from flask import flash, render_template,redirect,request,session
@@ -30,6 +31,7 @@ def new_event_form():
         'information': request.form['information'],
         'location': request.form['location'],
         'time': request.form['time'],
+        #add attendee limit 
         'user_id': session['user_id']
     }
     Event.save(data)
@@ -70,7 +72,7 @@ def event_details(id):
 def event_edit(id):
     event = Event.get_one_event({'id':id})
     return render_template('event_edit.html', nav = nav_render(), event = event)
-# new_event_form
+# event_edit_form
 @app.route('/event_edit_form', methods = ['POST'])
 def event_edit_form():
     if 'user_id' not in session:
@@ -142,6 +144,57 @@ def event_search():
     if 'user_id' in session:
         events_all = Event.get_all_events()
         return render_template('event_search.html', nav = nav_render(), events_all = events_all)
+    else:
+        return redirect('/user_login')
+
+
+#hf just added to main 
+@app.route('/event_search_form', methods = ['POST'])
+def event_search_form():
+    if 'user_id' in session:
+        search_term = request.form['search']
+        search_word_array = search_term.split(' ')
+        # get events list
+        events_all = Event.get_all_events()
+        search_results = []
+        # check each event.name to see if the search words are in the name
+        for event in events_all:
+            valid = True
+            # filter from form to be accessed from event object
+            filter_form = request.form['filter']
+            # event object field to be accessed
+            event_field = {
+                'name': event.name,
+                'location': event.location,
+                'time': event.time,
+                'user_id': event.user.first_name + ' ' + event.user.last_name,
+            }
+            # check if each word is in search_term
+            for word in search_word_array:
+                # check if filter type is date/time
+                if type(event_field[filter_form]) == type(todays_date):
+                    event_date = event_field[filter_form].strftime('%Y-%m-%d')
+                    print('DATE Of Event:', event_date)
+                    print('DATE Of Search:', search_term)
+                    print()
+                    if event_date != search_term:
+                        valid = False
+                # if filter type isn't date/time
+                elif word.lower() not in event_field[filter_form].lower():
+                    valid = False
+            if valid:
+                search_results.append(event)
+        if type(event_field[filter_form]) == type(todays_date):
+            search_term = ''
+        print('search_results'.upper(),search_results)
+
+        return render_template(
+            'event_search.html', 
+            nav = nav_render(), 
+            events_all = search_results, 
+            filter_ = request.form['filter'], 
+            search_term = search_term
+        )
     else:
         return redirect('/user_login')
 

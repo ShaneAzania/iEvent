@@ -25,19 +25,19 @@
 			<div class="row">
 				<div class="col-12 col-md-8 col-xl-6 mx-auto">
 					<form action="/event_edit_form" method="post">
-						<div class="form-group">
+						<div class="form-group mb-3">
 							<label for="name">Event Name: </label>
 							<input type="text" name="name" class="form-control" value="{{event.name}}" />
 						</div>
-						<div class="form-group">
+						<div class="form-group mb-3">
 							<label for="" class="form-label">Information:</label>
 							<textarea class="form-control" name="information" id="information" rows="3">{{event.information}}</textarea>
 						</div>
-						<div class="form-group">
+						<div class="form-group mb-3">
 							<label for="location">Location: </label>
 							<input type="text" name="location" class="form-control" value="{{event.location}}" />
 						</div>
-						<div class="form-group time">
+						<div class="form-group time mb-3">
 							<label for="time">Date & Time: </label>
 							<input type="datetime-local" name="time" class="form-control" value="{{event.time}}" />
 							<small id="helpId" class="form-text text-muted">Date ( MM/DD/YYYY ) and Time ( HH:MM:AM/PM )</small>
