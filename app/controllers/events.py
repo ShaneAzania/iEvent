@@ -145,9 +145,3 @@ def event_search():
     else:
         return redirect('/user_login')
 
-
-    #     def search_func(lst, x):
-    # if lst and x in lst: # test for emptiness and for membership
-    #     return "success"
-    # else:
-    #     return "failure"
