@@ -46,10 +46,10 @@
 						<td>{{event.location}}</td>
 						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
 						<td class="text-center">{{event.attendee_count}}/{{event.attendee_limit}}</td>
-						<td>{{event.user.first_name}} {{event.user.last_name}}</td>
-					</tr>
+						<td><a href="/user_details/{{event.user.id}}">{{event.user.first_name}} {{event.user.last_name}}</td></a>
 					{% endfor %} {% else %}
 					<tr>
+						<td>None</td>
 						<td>None</td>
 						<td>None</td>
 						<td>None</td>
@@ -77,11 +77,11 @@
 						<td>{{event.location}}</td>
 						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
 						<td class="text-center">{{event.attendee_count}}/{{event.attendee_limit}}</td>
-						<td>{{event.user.first_name}} {{event.user.last_name}}</td>
-						<td></td>
+						<td><a href="/user_details/{{event.user.id}}">{{event.user.first_name}} {{event.user.last_name}}</td></a>
 					</tr>
 					{% endfor %} {% else %}
 					<tr>
+						<td>None</td>
 						<td>None</td>
 						<td>None</td>
 						<td>None</td>
@@ -109,13 +109,11 @@
 						<td>{{event.location}}</td>
 						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
 						<td class="text-center">{{event.attendee_count}}/{{event.attendee_limit}}</td>
-						<td>{{event.user.first_name}} {{event.user.last_name}}</td>
-						<td>
-							<!-- if statment for might need to encomus lines 41-44 -->
-						</td>
+						<td><a href="/user_details/{{event.user.id}}">{{event.user.first_name}} {{event.user.last_name}}</td></a>
 					</tr>
 					{% endfor %} {% else %}
 					<tr>
+						<td>None</td>
 						<td>None</td>
 						<td>None</td>
 						<td>None</td>
