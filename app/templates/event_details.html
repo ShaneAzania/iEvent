@@ -52,13 +52,11 @@
 						Info: <br />
 						{{event.information}} <br />
 						Location: {{event.location}} <br />
-						Attendee Limit: {{event.attendee_limit}}
+						Attendees: {{event.attendee_count}}/{{event.attendee_limit}}
 					</div>
 					<hr />
 					<div>
-						<div class="d-flex">
-							Attendees ( {% if event.attendees[0].first_name is not none %} {{event.attendees | length}} {% else %} {{0}} {% endif %} )
-						</div>
+						<div class="d-flex">Attendees</div>
 						<div>
 							{% if attendees[0].first_name is not none %} {% for user in attendees %}
 							<p>{{user.first_name}} {{user.last_name}}</p>

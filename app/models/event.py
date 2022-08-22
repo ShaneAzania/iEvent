@@ -17,6 +17,7 @@ class Event:
         self.user_id = db_data['user_id']
         self.user = None
         self.attendees = []
+        self.attendee_count = 0
 
     @classmethod 
     def save(cls,event):
@@ -35,6 +36,11 @@ class Event:
             this_event.user = user.User.get_one({'id':row['users.id']})
             #  append this event object to 'all_events' list
             all_events.append(this_event)
+            # Set the attendee_count property
+            query = "SELECT * FROM events_with_attendees WHERE event_id = %(event_id)s;"
+            result = connectToMySQL(cls.db).query_db(query, {'event_id': row['id']})
+            this_event.attendee_count = len(result)
+            print('ATTENDEE QUANTITY AFTER INSERT INTO DATABASE:', this_event.attendee_count)
         return all_events 
     @classmethod 
     def get_all_events_future(cls):
@@ -48,6 +54,11 @@ class Event:
             this_event.user = user.User.get_one({'id':row['users.id']})
             #  append this event object to 'all_events' list
             all_events.append(this_event)
+            # Set the attendee_count property
+            query = "SELECT * FROM events_with_attendees WHERE event_id = %(event_id)s;"
+            result = connectToMySQL(cls.db).query_db(query, {'event_id': row['id']})
+            this_event.attendee_count = len(result)
+            print('ATTENDEE QUANTITY AFTER INSERT INTO DATABASE:', this_event.attendee_count)
         return all_events 
     @classmethod 
     def get_all_events_past(cls):
@@ -62,6 +73,11 @@ class Event:
             this_event.user = user.User.get_one({'id':row['users.id']})
             #  append this event object to 'all_events' list
             all_events.append(this_event)
+            # Set the attendee_count property
+            query = "SELECT * FROM events_with_attendees WHERE event_id = %(event_id)s;"
+            result = connectToMySQL(cls.db).query_db(query, {'event_id': row['id']})
+            this_event.attendee_count = len(result)
+            print('ATTENDEE QUANTITY AFTER INSERT INTO DATABASE:', this_event.attendee_count)
         return all_events 
 
     @classmethod 
@@ -96,6 +112,11 @@ class Event:
 
             #  append this user object to 'attendees' list
             this_event.attendees.append(this_user)
+            # Set the attendee_count property
+            query = "SELECT * FROM events_with_attendees WHERE event_id = %(event_id)s;"
+            result = connectToMySQL(cls.db).query_db(query, {'event_id': event['id']})
+            this_event.attendee_count = len(result)
+            print('ATTENDEE QUANTITY AFTER INSERT INTO DATABASE:', this_event.attendee_count)
         # END GET ATTENDEES
 
         return this_event
@@ -128,15 +149,12 @@ class Event:
         query = "SELECT * FROM events_with_attendees WHERE event_id = %(event_id)s;"
         result = connectToMySQL(cls.db).query_db(query, event)
         attendee_quantity = len(result)
-
-        print('ATTENDEE LIMIT:', attendee_limit)
-        print('ATTENDEE QUANTITY:', attendee_quantity)
-
         # check if this user is a current attendee
         query = "SELECT * FROM events_with_attendees WHERE event_id = %(event_id)s AND user_id = %(user_id)s;"
         result = connectToMySQL(cls.db).query_db(query, event)
         if result:
             return False
+        # Check if the attendee limit is already reached
         elif attendee_limit <= attendee_quantity:
             flash('Sorry, attendee limit reached.')
             return False
@@ -144,11 +162,7 @@ class Event:
             # if this user is not a current attendee and attendee_limit is not reached, create the row
             query = "INSERT INTO events_with_attendees(event_id, user_id) VALUES (%(event_id)s, %(user_id)s);"
             connectToMySQL(cls.db).query_db(query, event)
-            # check the current number of attendees after the insert into the database
-            query = "SELECT * FROM events_with_attendees WHERE event_id = %(event_id)s;"
-            result = connectToMySQL(cls.db).query_db(query, event)
-            print('ATTENDEE QUANTITY AFTER INSERT INTO DATABASE:', len(result))
-            return 
+            return True
     @classmethod 
     def delete_attendee(cls,event):
         # check if pair exists

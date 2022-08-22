@@ -27,17 +27,15 @@
 				<thead>
 					<div class="d-flex justify-content-between">
 						<p class="d-inline-block">
-							Today is {{todays_date.strftime('%m/%d/%Y')}} and you have
-							{{events_today | length}} event today:
+							Today is {{todays_date.strftime('%m/%d/%Y')}} and you have {{events_today | length}} event today:
 						</p>
-						<a href="/new_event" class="btn btn-primary">
-							Add New Event
-						</a>
+						<a href="/new_event" class="btn btn-primary"> Add New Event </a>
 					</div>
 					<tr>
 						<th>Event Name</th>
 						<th>Location</th>
 						<th>Day & Time</th>
+						<th class="text-center">Attendees</th>
 						<th>Creator</th>
 					</tr>
 				</thead>
@@ -47,7 +45,8 @@
 						<td><a href="/event_details/{{event.id}}">{{event.name}}</a></td>
 						<td>{{event.location}}</td>
 						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
-						<td>{{event.user.last_name}}testing </td>
+						<td class="text-center">{{event.attendee_count}}/{{event.attendee_limit}}</td>
+						<td>{{event.user.first_name}} {{event.user.last_name}}</td>
 					</tr>
 					{% endfor %} {% else %}
 					<tr>
@@ -67,6 +66,7 @@
 						<th>Event Name</th>
 						<th>Location</th>
 						<th>Day & Time</th>
+						<th class="text-center">Attendees</th>
 						<th>Creator</th>
 					</tr>
 				</thead>
@@ -76,9 +76,9 @@
 						<td><a href="/event_details/{{event.id}}">{{event.name}}</a></td>
 						<td>{{event.location}}</td>
 						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
+						<td class="text-center">{{event.attendee_count}}/{{event.attendee_limit}}</td>
 						<td>{{event.user.first_name}} {{event.user.last_name}}</td>
-						<td>
-						</td>
+						<td></td>
 					</tr>
 					{% endfor %} {% else %}
 					<tr>
@@ -98,6 +98,7 @@
 						<th>Event Name</th>
 						<th>Location</th>
 						<th>Day & Time</th>
+						<th class="text-center">Attendees</th>
 						<th>Creator</th>
 					</tr>
 				</thead>
@@ -107,6 +108,7 @@
 						<td><a href="/event_details/{{event.id}}">{{event.name}}</a></td>
 						<td>{{event.location}}</td>
 						<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
+						<td class="text-center">{{event.attendee_count}}/{{event.attendee_limit}}</td>
 						<td>{{event.user.first_name}} {{event.user.last_name}}</td>
 						<td>
 							<!-- if statment for might need to encomus lines 41-44 -->
