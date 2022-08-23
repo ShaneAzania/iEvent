@@ -61,7 +61,7 @@
 								<td>{{event.location}}</td>
 								<td>{{event.time.strftime('%m/%d/%Y %I:%M:%p')}}</td>
 								<td class="text-center">{{event.attendee_count}}/{{event.attendee_limit}}</td>
-								<td><a href="/user_details/{{event.user.id}}">{{event.user.first_name}} {{event.user.last_name}}</td></a>
+								<td><a href="/user_details/{{event.user_id}}">{{event.user.first_name}} {{event.user.last_name}}</td></a>
 							</tr>
 							{% endfor %} 
 						{% else %}
