@@ -120,3 +120,20 @@ def user_dash():
         return render_template('user_dash.html', nav = nav_render(), events_future = events_future, events_today = events_today, events_past = events_past, todays_date = todays_date)
     else:
         return redirect('/user_login')
+
+#details
+@app.route('/user_details')
+def user_details():
+    user = User.get_one({'id':id})
+    return render_template('user_details.html', user=user)
+
+@app.route("/users/update", methods=["POST"])
+def update_user():
+    data = { 
+        'id': request.form['id'],
+        'first_name' : request.form['first_name'],
+        'last_name' : request.form['last_name'],
+        'email' : request.form['email']
+    }
+    User.update(data)
+    return redirect('user_dash')
