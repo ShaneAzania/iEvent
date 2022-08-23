@@ -1,3 +1,4 @@
+from crypt import methods
 from app import app
 from flask import flash, render_template,redirect,request,session
 from app.models.user import User
@@ -21,9 +22,9 @@ def join():
         return redirect('/')
     else:
         return render_template('user_join.html', nav = nav_render())
-
+#user_join_form
 @app.route('/user_join_form', methods = ['POST'])
-def user_register_form():
+def user_join_form():
     if User.validate_form(request.form):
         data = {
             'first_name' : request.form['first_name'],
@@ -96,15 +97,65 @@ def user_logout():
     session.clear()
     return redirect('/user_login')
 
-#edit user #####################################
+#user_details #####################################
 @app.route('/user_details/<int:id>')
-def edit_user(user_id):
+def user_details(id):
     if 'user_id' not in session:
         return redirect ('/logout')
     user_data = {
-        "id": session[user_id]
+        "id": id
     }
-    return render_template("user_details.html", user=User.get_one(user_id))
+    return render_template("user_details.html", nav = nav_render(), user=User.get_one(user_data))
+
+#user_edit #####################################
+@app.route('/user_edit/<int:id>')
+def user_edit(id):
+    # check if a user is signed in
+    if 'user_id' not in session:
+        return redirect ('/')
+    this_user = User.get_one({'id':id})
+    # check if current user matches the user to be edited
+    if session['user_id'] != this_user.id:
+        return redirect (f'/user_details/{id}')
+    return render_template("user_edit.html", nav = nav_render(), user=User.get_one({"id": id}))
+#user_edit_form #####################################
+@app.route('/user_edit_form', methods=['POST'])
+def user_edit_form():
+    # check if a user is signed in
+    if 'user_id' not in session:
+        return redirect ('/')
+    this_user = User.get_one({'id':request.form['id']})
+    # check if current user matches the user to be edited
+    if session['user_id'] != this_user.id:
+        return redirect (f'/user_details/{this_user.id}')
+    data = { 
+        'id': session['user_id'],
+        'first_name' : request.form['first_name'],
+        'last_name' : request.form['last_name'],
+        'email' : request.form['email'],
+        'current_password': request.form['current_password'],
+        'password' : request.form['password'],
+        'password2' : request.form['password2']
+    }
+
+    # print()
+    # print('THIS_USER PASSWORD', this_user.password)
+    # print('FORM PASSWORD', data['current_password'])
+    # print('BCRYPT PASSWORD', bcrypt.check_password_hash(this_user.password, data['current_password']))
+    # print()
+    
+    # check if current password matches current password stored in database
+    if not bcrypt.check_password_hash(this_user.password, data['current_password']):
+        flash('Incorrect Current Password')
+        return redirect(f"/user_edit/{this_user.id}")
+    # Validate data for update
+    if User.validate_form(data):
+        #  bcrypt the validated password
+        data['password'] = bcrypt.generate_password_hash(request.form['password'])
+        User.update(data)
+        return redirect(f"/user_details/{this_user.id}")
+    else:
+        return redirect(f"/user_edit/{this_user.id}")
 
 #dash
 @app.route('/user_dash')
@@ -120,20 +171,3 @@ def user_dash():
         return render_template('user_dash.html', nav = nav_render(), events_future = events_future, events_today = events_today, events_past = events_past, todays_date = todays_date)
     else:
         return redirect('/user_login')
-
-#details
-@app.route('/user_details')
-def user_details():
-    user = User.get_one({'id':id})
-    return render_template('user_details.html', user=user)
-
-@app.route("/users/update", methods=["POST"])
-def update_user():
-    data = { 
-        'id': request.form['id'],
-        'first_name' : request.form['first_name'],
-        'last_name' : request.form['last_name'],
-        'email' : request.form['email']
-    }
-    User.update(data)
-    return redirect('user_dash')

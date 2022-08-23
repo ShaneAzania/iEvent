@@ -1,7 +1,7 @@
 from flask import session
 
 # Variables
-site_title = 'iSport'
+site_title = 'iEvent'
 
 # functions
 def nav_render(data = {}):

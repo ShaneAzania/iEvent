@@ -54,7 +54,7 @@ class User:
     # first_name last_name email password age dojo_id
     @classmethod
     def update(cls,data):
-        query = "UPDATE "+ cls.db_table +" SET first_name = '%(first_name)s', last_name = '%(last_name)s', email = '%(email)s', password = '%(password)s', updated_at = now() WHERE id = %(id)s;"
+        query = "UPDATE "+ cls.db_table +" SET first_name = %(first_name)s, last_name = %(last_name)s, email = %(email)s, password = %(password)s, updated_at = now() WHERE id = %(id)s;"
         connectToMySQL(cls.db).query_db( query, data)
     #**********************************************************************************************************************************
     #delete*****************************************************************
